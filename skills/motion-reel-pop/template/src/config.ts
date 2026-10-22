@@ -91,8 +91,13 @@ export const resolveTime = (ref: TimeRef): number => {
   for (const w of WORDS) {
     const n = normWord(w.text);
     // exact match, or the word with up to 3 Hebrew prefix letters (ו ה ב ל ש כ מ) glued in front
-    const prefix = n.endsWith(target) ? n.slice(0, n.length - target.length).replace(/-$/, "") : null;
-    if (prefix !== null && /^[\u05D5\u05D4\u05D1\u05DC\u05E9\u05DB\u05DE]{0,3}$/.test(prefix)) {
+    const prefix = n.endsWith(target)
+      ? n.slice(0, n.length - target.length).replace(/-$/, "")
+      : null;
+    if (
+      prefix !== null &&
+      /^[\u05D5\u05D4\u05D1\u05DC\u05E9\u05DB\u05DE]{0,3}$/.test(prefix)
+    ) {
       count++;
       if (count === nth) return (m[3] ? w.end : w.start) + offset;
     }
@@ -108,12 +113,15 @@ const sp = <T extends Span>(s: T) => ({
 });
 
 // distributive, so each card type keeps its own fields
-export type Timed<T> = T extends unknown ? Omit<T, "at" | "to"> & { at: number; to: number } : never;
+export type Timed<T> = T extends unknown
+  ? Omit<T, "at" | "to"> & { at: number; to: number }
+  : never;
 
 export const HOOK_END = snap(resolveTime(config.hook.until));
 export const CARDS = config.cards.map((c) => {
   const out = sp(c) as Record<string, unknown>;
-  if (c.type === "steps") out.items = c.items.map((it) => ({ ...it, at: snap(resolveTime(it.at)) }));
+  if (c.type === "steps")
+    out.items = c.items.map((it) => ({ ...it, at: snap(resolveTime(it.at)) }));
   return out;
 }) as unknown as Timed<CardSpec>[];
 export const ZOOMS = config.zooms.map(sp);
@@ -132,12 +140,24 @@ export const CAPTION_HIDE = config.captions.hide.map(
 
 // ---------- card mode (top graphic + face window) ----------
 // Hook, cards and CTA put the reel in "card mode". Gaps under 0.6 s are bridged so the face does not bounce.
-export const cardIntervals = (duration: number): [number, number][] => {
+// A full-frame B-roll that leads into card mode joins it: the face moves into its window behind the B-roll,
+// instead of flashing full screen for a frame when the B-roll ends. (Split keeps its own panel logic.)
+export const cardIntervals = (
+  duration: number,
+  lookId?: string,
+): [number, number][] => {
   const raw: [number, number][] = [
     [0, HOOK_END],
     ...CARDS.map((c) => [c.at, c.to] as [number, number]),
   ];
   if (config.cta) raw.push([CTA_AT, duration + 1]);
+  if (lookId && lookId !== "split") {
+    const starts = raw.map(([a]) => a);
+    BROLL.forEach((b) => {
+      if (starts.some((a) => a >= b.to - 0.05 && a - b.to < 0.6))
+        raw.push([b.at, b.to]);
+    });
+  }
   raw.sort((a, b) => a[0] - b[0]);
   const out: [number, number][] = [];
   for (const iv of raw) {

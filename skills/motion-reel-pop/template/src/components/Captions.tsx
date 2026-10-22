@@ -42,9 +42,9 @@ type Page = { start: number; end: number; toks: Tok[] };
 
 const HL = (config.captions.highlight ?? []).map((h) => h.toLowerCase());
 
-const buildPages = (duration: number): Page[] => {
+const buildPages = (duration: number, lookId: string): Page[] => {
   const edges = [
-    ...cardIntervals(duration).flat(),
+    ...cardIntervals(duration, lookId).flat(),
     ...BROLL.flatMap((b) => [b.at, b.to]),
     ...PUNCHES.flatMap((p) => [p.at, p.to]),
     ...ZOOMS.flatMap((z) => [z.at, z.to]),
@@ -116,9 +116,9 @@ const buildPages = (duration: number): Page[] => {
   return pages;
 };
 
-let cache: { d: number; pages: Page[] } | null = null;
-const getPages = (d: number) => {
-  if (!cache || cache.d !== d) cache = { d, pages: buildPages(d) };
+let cache: { d: number; look: string; pages: Page[] } | null = null;
+const getPages = (d: number, look: string) => {
+  if (!cache || cache.d !== d || cache.look !== look) cache = { d, look, pages: buildPages(d, look) };
   return cache.pages;
 };
 
@@ -127,7 +127,7 @@ export const Captions: React.FC<{ st: StageState }> = ({ st }) => {
   const { durationInFrames } = useVideoConfig();
   const look = useLook();
   const t = frame / FPS;
-  const pages = getPages(durationInFrames / FPS);
+  const pages = getPages(durationInFrames / FPS, look.id);
   const hidden =
     t < HOOK_END ||
     t >= CTA_AT ||
@@ -142,7 +142,14 @@ export const Captions: React.FC<{ st: StageState }> = ({ st }) => {
       BROLL.filter((b) => !b.src).map((b) => [b.at, b.to]),
     );
   // no caption while the face window is morphing (0.3 s), it would fly over the face
-  if (hidden || (st.m > 0.04 && st.m < 0.96)) return null;
+  // over a full-frame B-roll the face window is hidden, so captions keep the talk band and do not pause
+  const inBroll =
+    look.id !== "split" &&
+    inAny(
+      t,
+      BROLL.map((b) => [b.at, b.to]),
+    );
+  if (hidden || (!inBroll && st.m > 0.04 && st.m < 0.96)) return null;
   const page = pages.find((p) => t >= p.start && t < p.end);
   if (!page) return null;
 
@@ -164,7 +171,7 @@ export const Captions: React.FC<{ st: StageState }> = ({ st }) => {
         : cardUp
           ? "seam"
           : "panel"
-      : st.m > 0.5
+      : !inBroll && st.m > 0.5
         ? "seam"
         : "talk";
 

@@ -75,8 +75,12 @@ const buildCues = (lookId: string, duration: number): Cue[] => {
   const cues: Cue[] = [];
   const cardSound =
     lookId === "glass" ? "tick" : lookId === "mono" ? "click" : "pop";
-  cardIntervals(duration).forEach(
-    ([a]) => a > 0.05 && cues.push({ t: a, file: "click", vol: 0.28 }),
+  // no second click where a B-roll already clicks at the same moment
+  cardIntervals(duration, lookId).forEach(
+    ([a]) =>
+      a > 0.05 &&
+      !BROLL.some((b) => Math.abs(b.at - a) < 0.05) &&
+      cues.push({ t: a, file: "click", vol: 0.28 }),
   );
   CARDS.forEach((c) => {
     cues.push({ t: c.at, file: cardSound, vol: 0.32 });

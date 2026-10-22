@@ -39,7 +39,7 @@ export const useStageState = (): StageState => {
   const look = useLook();
   const t = frame / FPS;
   const dur = durationInFrames / FPS;
-  const ivs = cardIntervals(dur);
+  const ivs = cardIntervals(dur, look.id);
 
   // m: ease into card mode over 0.35 s, out over 0.3 s (Mono cuts hard, Split stays split)
   let m = 0;
