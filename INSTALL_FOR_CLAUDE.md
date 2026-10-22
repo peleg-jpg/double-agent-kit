@@ -7,9 +7,10 @@ password or a payment.
 ## 1. Run the installer
 
 The installer does everything: Xcode developer tools check (Mac), Node.js, FFmpeg, the kit's 5 skills into
-`~/.claude/skills/`, Remotion's official skills, a workspace at `~/double-agent/` (prompts, guides, reels), and a
-2-second Remotion test render. It needs no password and no Homebrew. It takes 3-6 minutes, so run it with a
-10-minute timeout or in the background, and tell the user it is working.
+`~/.claude/skills/`, Remotion's official skills, a workspace at `~/double-agent/` (prompts, guides, reels), and the
+Remotion editing engine at `~/.double-agent/engine` with a 2-second test render. It needs no password and no
+Homebrew. The first run takes 10-15 minutes (it downloads about 1 GB), so run it in the background or with the
+longest timeout, and tell the user it is working.
 
 **You are inside the kit folder already** (the user downloaded the ZIP and opened it):
 

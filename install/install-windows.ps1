@@ -1,6 +1,6 @@
 # Double Agent kit installer for Windows 10/11.
 #   powershell -ExecutionPolicy Bypass -File install\install-windows.ps1            install everything + a 2-second Remotion test render
-#   powershell -ExecutionPolicy Bypass -File install\install-windows.ps1 -NoTest    skip the test render
+#   powershell -ExecutionPolicy Bypass -File install\install-windows.ps1 -NoTest    skip the test render (the editing engine is still installed)
 # Safe to run again: it adds what is missing and updates the kit's skills. No admin rights needed.
 
 param([switch]$NoTest)
@@ -111,21 +111,30 @@ New-Item -ItemType Directory -Force "$Work\reels" | Out-Null
 Copy-Item -Recurse -Force (Join-Path $Kit "prompts"), (Join-Path $Kit "guides") $Work
 Ok "prompts, guides and a reels folder in $Work"
 
-if (-not $NoTest -and (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
-  Step "Test: rendering 2 seconds with Remotion (first time about 2 minutes)"
-  $t = Join-Path $env:TEMP ("double-agent-test-" + [guid]::NewGuid().ToString("N").Substring(0, 8))
-  New-Item -ItemType Directory -Force $t | Out-Null
-  Copy-Item -Recurse -Force "$Skills\motion-reel-pop\template\*" $t
-  Push-Location $t
+# The editing engine: Remotion + its Chrome (about 1 GB), installed once here and linked into every reel folder.
+if (Get-Command npm.cmd -ErrorAction SilentlyContinue) {
+  Step "Remotion editing engine (first time 5-10 minutes, it downloads about 1 GB)"
+  $e = Join-Path $Tools "engine"
+  New-Item -ItemType Directory -Force $e | Out-Null
+  Copy-Item -Recurse -Force "$Skills\motion-reel-pop\template\*" $e
+  Push-Location $e
   & npm.cmd i --no-audit --no-fund --loglevel=error *> $null
-  & npx.cmd remotion render src/index.ts DemoSpeaker out/test.mp4 --frames=0-59 --log=error *> $null
-  $rendered = (Test-Path "out\test.mp4") -and ((Get-Item "out\test.mp4").Length -gt 0)
+  $installed = Test-Path "node_modules\.bin\remotion.cmd"
+  $rendered = $false
+  if ($installed -and -not $NoTest) {
+    Remove-Item -Force "out\test.mp4" -ErrorAction SilentlyContinue
+    & npx.cmd remotion render src/index.ts DemoSpeaker out/test.mp4 --frames=0-59 --log=error *> $null
+    $rendered = (Test-Path "out\test.mp4") -and ((Get-Item "out\test.mp4").Length -gt 0)
+  }
   Pop-Location
-  if ($rendered) {
-    Ok "Remotion rendered a test video, the editor works"
-    Remove-Item -Recurse -Force $t -ErrorAction SilentlyContinue
+  if (-not $installed) {
+    Miss "Remotion: npm i failed in $e. Run the installer again"
   } else {
-    Miss "Remotion test render failed. Ask Claude to run: cd $t; npx remotion render src/index.ts DemoSpeaker out/test.mp4 --frames=0-59"
+    Ok "Remotion installed in $e"
+    if (-not $NoTest) {
+      if ($rendered) { Ok "Remotion rendered a test video, the editor works" }
+      else { Miss "Remotion test render failed. Ask Claude to run: cd $e; npx remotion render src/index.ts DemoSpeaker out/test.mp4 --frames=0-59" }
+    }
   }
 }
 

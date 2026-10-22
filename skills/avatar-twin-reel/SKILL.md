@@ -142,14 +142,24 @@ Use it only if the user asks for it.
 Read `~/.claude/skills/motion-reel-pop/SKILL.md` now, with `references/config.md`, and follow it exactly. It holds
 the beat rules, the 4 looks, the Hebrew RTL rules and the quality gate. What changes for this pipeline:
 
-**Setup** (inside the reel folder, so the reel folder becomes the edit project):
+**Setup** (inside the reel folder, so the reel folder becomes the edit project). The installer put Remotion and its
+Chrome (about 1 GB) once in `~/.double-agent/engine`. Link to it instead of installing again, so a new reel is
+ready in seconds and takes no extra disk:
 
 ```bash
 cp -R ~/.claude/skills/motion-reel-pop/template/. .
-npm i
+ln -s ~/.double-agent/engine/node_modules node_modules
 ```
 
-Windows PowerShell: `Copy-Item -Recurse -Force "$HOME\.claude\skills\motion-reel-pop\template\*" .` then `npm i`.
+Windows PowerShell:
+
+```powershell
+Copy-Item -Recurse -Force "$HOME\.claude\skills\motion-reel-pop\template\*" .
+New-Item -ItemType Junction -Path node_modules -Target "$HOME\.double-agent\engine\node_modules"
+```
+
+No `~/.double-agent/engine/node_modules` (the kit was installed some other way): run `npm i` instead of the link.
+Never delete inside a linked `node_modules`: it is shared by every reel.
 
 **Inputs:**
 
@@ -178,8 +188,8 @@ the Instagram caption to `caption.txt`. Ask one question: "מה לשנות?".
 
 Changes are config edits and a new render. Keep every version (`final_reel_v1.mp4`, `final_reel_v2.mp4`).
 
-When the user says the reel is done, delete `node_modules` in the reel folder: it takes about 1 GB per reel, and
-`npm i` brings it back if they want changes later. Tell them in one line.
+If you ran `npm i` in the reel folder (no shared engine), delete that `node_modules` when the user says the reel is
+done: it takes about 1 GB, and `npm i` brings it back for later changes. A linked `node_modules` stays as it is.
 
 Never publish, post, pay or message anyone yourself. Remind the user to turn on Instagram's "AI info" label.
 

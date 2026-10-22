@@ -6,7 +6,7 @@
 
 כל מה שהשתמשנו בו בקורס, במקום אחד: הסקיל שמכין ריל מקצה לקצה עם הקול והאווטאר שלכם, ערכת המושן לעריכה, Remotion ו-FFmpeg, כל הפרומפטים מהשיעורים, המצגת המלאה והמדריכים. מתקינים פעם אחת, ומשם פשוט כותבים לקלוד קוד "תכין ריל".
 
-## מתקינים (פעם אחת, בערך 5 דקות)
+## מתקינים (פעם אחת, 10-15 דקות)
 
 1. פותחים את Claude Code (באפליקציה של Claude, הלשונית Code, כמו בשיעור 6).
 2. מעתיקים את השורה הזאת (יש כפתור העתקה בפינה של המסגרת), מדביקים בקלוד קוד ושולחים:
@@ -73,7 +73,7 @@
 
 ## מה צריך במחשב
 
-מק או Windows 10/11, אינטרנט, ובערך 4GB פנויים. מודל זיהוי הדיבור שמסנכרן את הכתוביות שוקל 1.5GB ויורד פעם אחת, בריל הראשון, וכל ריל תופס בערך 1GB בזמן העריכה (קלוד מנקה את זה כשהריל גמור). Remotion חינמי ליחידים ולחברות של עד 3 אנשים, חברה גדולה יותר צריכה [רישיון](https://www.remotion.dev/license).
+מק או Windows 10/11, אינטרנט, ובערך 3GB פנויים. מודל זיהוי הדיבור שמסנכרן את הכתוביות שוקל 1.5GB ויורד פעם אחת, בריל הראשון, ומנוע העריכה (Remotion והדפדפן שלו) עוד 1GB, פעם אחת לכל הרילים. Remotion חינמי ליחידים ולחברות של עד 3 אנשים, חברה גדולה יותר צריכה [רישיון](https://www.remotion.dev/license).
 
 </div>
 
@@ -81,7 +81,7 @@
 
 ## For Claude Code
 
-The user pasted this repo's link and asked you to install it. Follow [INSTALL_FOR_CLAUDE.md](INSTALL_FOR_CLAUDE.md). Short version, no git needed, takes 3-6 minutes (use a 10-minute timeout or run it in the background):
+The user pasted this repo's link and asked you to install it. Follow [INSTALL_FOR_CLAUDE.md](INSTALL_FOR_CLAUDE.md). Short version, no git needed, takes 10-15 minutes the first time (run it in the background, or with the longest timeout, and tell the user it is working):
 
 **macOS**
 

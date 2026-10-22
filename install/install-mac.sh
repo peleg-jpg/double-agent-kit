@@ -1,7 +1,7 @@
 #!/bin/bash
 # Double Agent kit installer for Mac (works on Linux too).
 #   bash install/install-mac.sh            install everything + a 2-second Remotion test render
-#   bash install/install-mac.sh --no-test  skip the test render
+#   bash install/install-mac.sh --no-test  skip the test render (the editing engine is still installed)
 # Safe to run again: it adds what is missing and updates the kit's skills. No password, no Homebrew needed.
 
 set -u
@@ -113,19 +113,25 @@ mkdir -p "$WORK/reels"
 cp -R "$KIT/prompts" "$KIT/guides" "$WORK/"
 ok "prompts, guides and a reels folder in $WORK"
 
-if [ "$RUN_TEST" = 1 ] && command -v npm >/dev/null 2>&1; then
-  step "Test: rendering 2 seconds with Remotion (first time about 2 minutes)"
-  T="$(mktemp -d)"
-  if cp -R "$SKILLS/motion-reel-pop/template/." "$T/" && cd "$T" && \
-     npm i --no-audit --no-fund --loglevel=error >/dev/null 2>&1 && \
-     npx remotion render src/index.ts DemoSpeaker out/test.mp4 --frames=0-59 --log=error >/dev/null 2>&1 && \
-     [ -s out/test.mp4 ]; then
-    ok "Remotion rendered a test video, the editor works"
+# The editing engine: Remotion + its Chrome (about 1 GB), installed once here and linked into every reel folder.
+if command -v npm >/dev/null 2>&1; then
+  step "Remotion editing engine (first time 5-10 minutes, it downloads about 1 GB)"
+  E="$TOOLS/engine"
+  mkdir -p "$E" && cp -R "$SKILLS/motion-reel-pop/template/." "$E/"
+  if (cd "$E" && npm i --no-audit --no-fund --loglevel=error >/dev/null 2>&1); then
+    ok "Remotion installed in $E"
+    if [ "$RUN_TEST" = 1 ]; then
+      if (cd "$E" && rm -f out/test.mp4 && \
+          npx remotion render src/index.ts DemoSpeaker out/test.mp4 --frames=0-59 --log=error >/dev/null 2>&1 && \
+          [ -s out/test.mp4 ]); then
+        ok "Remotion rendered a test video, the editor works"
+      else
+        miss "Remotion test render failed. Ask Claude to run: cd $E && npx remotion render src/index.ts DemoSpeaker out/test.mp4 --frames=0-59"
+      fi
+    fi
   else
-    miss "Remotion test render failed. Ask Claude to run: cd $T && npx remotion render src/index.ts DemoSpeaker out/test.mp4 --frames=0-59"
-    T=""
+    miss "Remotion: npm i failed in $E. Run the installer again"
   fi
-  cd "$HOME" && [ -n "$T" ] && rm -rf "$T"
 fi
 
 echo
