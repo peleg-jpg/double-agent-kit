@@ -23,12 +23,12 @@ looks edited, not generated. Do not build a Remotion project from scratch.
 
 Ask nothing you can see for yourself. Pick the entry point from what the user said and has:
 
-| The user has / says                                       | Start at                   |
-| --------------------------------------------------------- | -------------------------- |
-| "תכין ריל", nothing else                                  | step 1 (first run: step 0) |
-| A topic or a link to a reel they loved                    | step 2                     |
-| A ready script                                            | step 3                     |
-| `voice.mp3` already made                                  | step 4                     |
+| The user has / says                                       | Start at                      |
+| --------------------------------------------------------- | ----------------------------- |
+| "תכין ריל", nothing else                                  | step 1 (first run: step 0)    |
+| A topic or a link to a reel they loved                    | step 2                        |
+| A ready script                                            | step 3                        |
+| `voice.mp3` already made                                  | step 4                        |
 | An avatar video (HeyGen export or any 9:16 talking video) | step 5, edit only (no step 0) |
 
 ## 0. First run only
@@ -98,7 +98,10 @@ The user loved a video: fetch it with Apify, get its transcript (no transcript: 
 it into its parts (opening, proof, core, twist, close, length), save that recipe in `my-settings.md`, and write
 the new script with the same structure on their own topic. Copy structure only, never their sentences.
 
-Save `script.txt` (the exact words, used for captions) and `tts.txt` (the voice version). **Wait for approval.**
+Save `script.txt` (the exact words, used for captions) and `tts.txt` (the voice version). With the script, show a
+visual plan: one line per beat saying what is on screen and where the face is (full, in a window, or gone), and
+which real proof it uses (a site, a GitHub page, a number, the user's own screenshot). Plan it from
+`references/look-that-works.md`: full face only at the re-hook and the CTA. **Wait for approval.**
 Every correction the user makes becomes a one-line rule under "Rules from corrections".
 
 Right after approval, start the edit setup in the background (step 5, "Setup") so it is ready later.
@@ -139,14 +142,18 @@ Use it only if the user asks for it.
 
 ## 5. Edit with motion-reel-pop
 
-Read `~/.claude/skills/motion-reel-pop/SKILL.md` now, with `references/config.md`, and follow it. It holds the
-beat rules, the 4 looks, the Hebrew RTL rules and the quality gate. Skip its smoke test: the installer already
-rendered one, and its `demo-video` would overwrite `public/input.mp4`. What changes for this pipeline:
+First read `references/look-that-works.md` (next to this file) and look at `examples/gold-agentskills-1fps.jpg`.
+That is the target: a motion-graphics reel with real proof, where the full-screen face appears only at the re-hook
+and the CTA. Its rules beat motion-reel-pop's rhythm rules wherever they differ.
+
+Then read `~/.claude/skills/motion-reel-pop/SKILL.md` with `references/config.md`, and follow it for everything
+else: the config fields, the 4 looks, the Hebrew RTL rules and the quality gate. Skip its smoke test: the installer
+already rendered one, and its `demo-video` would overwrite `public/input.mp4`. What changes for this pipeline:
 
 **The user came only to edit** (they brought a video, steps 1-4 did not run):
 
 - Create the reel folder `~/double-agent/reels/<YYYY-MM-DD>-<slug>/` first, and copy their video in as `avatar.mp4`.
-- Their script, if they have one, becomes `script.txt`. If it spells English names in Hebrew letters (אופן איי איי,
+- Their script, if they have one, becomes `script.txt`. If it spells English names in Hebrew letters (product, company and plan names too: דוטס, פרו, אופן איי איי,
   צ'אט ג'י פי טי, סי אר אם), rewrite only those names in English (OpenAI, ChatGPT, CRM) and keep the original as
   `script_original.txt`. No script: transcribe without `--script` and read the transcript carefully.
 - No `my-settings.md`: pick the look by content (motion-reel-pop section 4), take the keyword from the script's last
@@ -188,13 +195,17 @@ Never delete inside a linked `node_modules`: it is shared by every reel.
 - Look and brand color from `my-settings.md`. Keyword: the `cta` button ("תגיבו <keyword>").
 - Music: only a track the user has a license for, in `public/music.mp3` at volume 0.06-0.08. No track: no music.
   The built-in sound effects carry the edit.
-- Visual variety matters most. The hook, the cards and the CTA already put the face in a window under a graphic.
-  Keep full-face stretches short (4 seconds at most) and always with a zoom, and fill the rest with cards, type
-  beats and the user's own screenshots (`public/broll/`).
+- Proof: before writing the config, collect the real things the visual plan names (logos, page screenshots framed
+  in the safe box, real numbers) into `public/broll/`, with the commands in `references/look-that-works.md`. A few
+  minutes here is the biggest quality jump of the whole reel.
+- Cover the timeline: from the end of the hook to the CTA, cards, B-roll and punches fill at least 75% of the time.
+  The full face shows only at the re-hook (with one zoom) and the CTA. Something changes every 1-2 seconds.
 
-**Quality gate:** run the stills and safe-zone check from the motion-reel-pop skill and LOOK at every image. Fix
-until clean. Then `npm run render` and `npm run finish`, and copy `out/reel_final.mp4` to `final_reel.mp4` in the
-reel folder. Loudness must read -14 LUFS (plus or minus 1).
+**Quality gate:** run the stills and safe-zone check from the motion-reel-pop skill and LOOK at every image. Then
+run the audit in `references/look-that-works.md` (one still per second, tiled, compared with the gold example):
+full face 20% or less, nothing frozen for 4 seconds, every named product shows its logo or page. Fix until it
+passes. Then `npm run render` and `npm run finish`, and copy `out/reel_final.mp4` to `final_reel.mp4` in the reel
+folder. Loudness must read -14 LUFS (plus or minus 1).
 
 ## 6. Show (gate 4)
 

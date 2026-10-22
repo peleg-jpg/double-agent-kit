@@ -60,3 +60,5 @@ for (const s of times) {
   });
   console.log(output);
 }
+// the bundle is a ~60 MB temp folder per run; the audit runs this many times
+fs.rmSync(serveUrl, { recursive: true, force: true });
