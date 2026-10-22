@@ -29,7 +29,7 @@ Ask nothing you can see for yourself. Pick the entry point from what the user sa
 | A topic or a link to a reel they loved                    | step 2                     |
 | A ready script                                            | step 3                     |
 | `voice.mp3` already made                                  | step 4                     |
-| An avatar video (HeyGen export or any 9:16 talking video) | step 5: just edit it       |
+| An avatar video (HeyGen export or any 9:16 talking video) | step 5, edit only (no step 0) |
 
 ## 0. First run only
 
@@ -139,8 +139,19 @@ Use it only if the user asks for it.
 
 ## 5. Edit with motion-reel-pop
 
-Read `~/.claude/skills/motion-reel-pop/SKILL.md` now, with `references/config.md`, and follow it exactly. It holds
-the beat rules, the 4 looks, the Hebrew RTL rules and the quality gate. What changes for this pipeline:
+Read `~/.claude/skills/motion-reel-pop/SKILL.md` now, with `references/config.md`, and follow it. It holds the
+beat rules, the 4 looks, the Hebrew RTL rules and the quality gate. Skip its smoke test: the installer already
+rendered one, and its `demo-video` would overwrite `public/input.mp4`. What changes for this pipeline:
+
+**The user came only to edit** (they brought a video, steps 1-4 did not run):
+
+- Create the reel folder `~/double-agent/reels/<YYYY-MM-DD>-<slug>/` first, and copy their video in as `avatar.mp4`.
+- Their script, if they have one, becomes `script.txt`. If it spells English names in Hebrew letters (אופן איי איי,
+  צ'אט ג'י פי טי, סי אר אם), rewrite only those names in English (OpenAI, ChatGPT, CRM) and keep the original as
+  `script_original.txt`. No script: transcribe without `--script` and read the transcript carefully.
+- No `my-settings.md`: pick the look by content (motion-reel-pop section 4), take the keyword from the script's last
+  line ("תגיבו X"), and offer to save both to `my-settings.md` at the end. Do not ask the voice or photo questions.
+- Write the Instagram caption yourself, following section 6 of the reel-script-hebrew skill.
 
 **Setup** (inside the reel folder, so the reel folder becomes the edit project). The installer put Remotion and its
 Chrome (about 1 GB) once in `~/.double-agent/engine`. Link to it instead of installing again, so a new reel is
@@ -149,6 +160,7 @@ ready in seconds and takes no extra disk:
 ```bash
 cp -R ~/.claude/skills/motion-reel-pop/template/. .
 ln -s ~/.double-agent/engine/node_modules node_modules
+mkdir -p out public/broll
 ```
 
 Windows PowerShell:
@@ -156,7 +168,12 @@ Windows PowerShell:
 ```powershell
 Copy-Item -Recurse -Force "$HOME\.claude\skills\motion-reel-pop\template\*" .
 New-Item -ItemType Junction -Path node_modules -Target "$HOME\.double-agent\engine\node_modules"
+New-Item -ItemType Directory -Force out, public\broll
 ```
+
+`node` or `npx` not found right after the install (same Claude session): the installer put them in
+`~/.double-agent/node/bin` and `~/.double-agent/bin`. Start commands with
+`export PATH="$HOME/.double-agent/node/bin:$HOME/.double-agent/bin:$PATH";` until Claude is restarted.
 
 No `~/.double-agent/engine/node_modules` (the kit was installed some other way): run `npm i` instead of the link.
 Never delete inside a linked `node_modules`: it is shared by every reel.
@@ -164,21 +181,20 @@ Never delete inside a linked `node_modules`: it is shared by every reel.
 **Inputs:**
 
 - Video: `cp avatar.mp4 public/input.mp4`. Its audio is already the final voice.
-- Words: `npm run transcribe -- public/input.mp4 --script script.txt`. Read the printed transcript and fix wrong
-  words in `captions.fix`. The first run downloads a 1.5 GB speech model once.
-- Face: HeyGen chest-up photos sit at about `{x: 540, y: 600}`. Check it on a still as the skill says.
+- Words: `npm run transcribe -- public/input.mp4 --script script.txt`. The spelling comes from the script and the
+  timing from the speech model; check the timing on the stills (a caption word must light up as it is said). The
+  first run downloads a 1.5 GB speech model once.
+- Face: HeyGen chest-up photos sit at about `{x: 540, y: 600}` (some exports measure y 650). Check it on a still.
 - Look and brand color from `my-settings.md`. Keyword: the `cta` button ("תגיבו <keyword>").
 - Music: only a track the user has a license for, in `public/music.mp3` at volume 0.06-0.08. No track: no music.
   The built-in sound effects carry the edit.
-- Visual variety matters most: the face should be full screen only around the hook, one emphasis point and the
-  call to action. Use cards, type beats and the user's own screenshots (`public/broll/`) for the rest.
+- Visual variety matters most. The hook, the cards and the CTA already put the face in a window under a graphic.
+  Keep full-face stretches short (4 seconds at most) and always with a zoom, and fill the rest with cards, type
+  beats and the user's own screenshots (`public/broll/`).
 
 **Quality gate:** run the stills and safe-zone check from the motion-reel-pop skill and LOOK at every image. Fix
 until clean. Then `npm run render` and `npm run finish`, and copy `out/reel_final.mp4` to `final_reel.mp4` in the
 reel folder. Loudness must read -14 LUFS (plus or minus 1).
-
-If the user came only to edit (they brought a video), use their video as `public/input.mp4` and their script, if
-they have one, as `script.txt`. Everything else is the same.
 
 ## 6. Show (gate 4)
 

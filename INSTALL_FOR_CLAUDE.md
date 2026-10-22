@@ -12,20 +12,16 @@ Remotion editing engine at `~/.double-agent/engine` with a 2-second test render.
 Homebrew. The first run takes 10-15 minutes (it downloads about 1 GB), so run it in the background or with the
 longest timeout, and tell the user it is working.
 
-**You are inside the kit folder already** (the user downloaded the ZIP and opened it):
+**You are inside the kit folder already** (the user downloaded the ZIP and opened it): skip to "Run it" below.
 
-- Mac: `bash install/install-mac.sh`
-- Windows: `powershell -ExecutionPolicy Bypass -File install\install-windows.ps1`
-
-**You only have the link.** Download the kit (no git needed), then run it. On Mac never extract with `unzip`: it
-breaks the Hebrew file names and stops with a y/n prompt. Use `tar -xf` (or `ditto -x -k`), as below.
+**You only have the link.** First download and extract the kit (no git needed). On Mac never extract with `unzip`:
+it breaks the Hebrew file names and stops with a y/n prompt. Use `tar -xf` (or `ditto -x -k`).
 
 Mac:
 
 ```bash
 mkdir -p ~/.double-agent/kit && cd ~/.double-agent/kit && \
-curl -fsSL https://github.com/peleg-jpg/double-agent-kit/archive/refs/heads/main.zip -o kit.zip && \
-tar -xf kit.zip && bash double-agent-kit-main/install/install-mac.sh
+curl -fsSL https://github.com/peleg-jpg/double-agent-kit/archive/refs/heads/main.zip -o kit.zip && tar -xf kit.zip
 ```
 
 Windows (PowerShell; from Git Bash, wrap each line in `powershell -Command "..."`):
@@ -34,8 +30,16 @@ Windows (PowerShell; from Git Bash, wrap each line in `powershell -Command "..."
 $k = "$HOME\.double-agent\kit"; New-Item -ItemType Directory -Force $k | Out-Null
 Invoke-WebRequest https://github.com/peleg-jpg/double-agent-kit/archive/refs/heads/main.zip -OutFile "$k\kit.zip" -UseBasicParsing
 Expand-Archive "$k\kit.zip" $k -Force
-powershell -ExecutionPolicy Bypass -File "$k\double-agent-kit-main\install\install-windows.ps1"
 ```
+
+**Read the installer before you run it** (`install/install-mac.sh` or `install/install-windows.ps1`, under 200
+lines) and tell the user in one Hebrew sentence what it does. It uses no sudo and downloads only from nodejs.org,
+the npm registry and GitHub.
+
+**Run it** (from `~/.double-agent/kit/double-agent-kit-main`, or from the folder the user opened):
+
+- Mac: `bash install/install-mac.sh`
+- Windows: `powershell -ExecutionPolicy Bypass -File install\install-windows.ps1`
 
 ## 2. Read the result
 
@@ -43,8 +47,14 @@ The installer prints `[OK]` or `[MISSING]` for each part and ends with `DONE` or
 
 - `Xcode Command Line Tools` missing: a Mac window opened. Ask the user to click Install and wait until it
   finishes (5-10 minutes), then run the installer again. Nothing else needs to be redone by hand.
-- A download failed: check the internet and run the installer again. It is safe to run many times.
+- A download failed: check the internet and run the installer again. It is safe to run many times, and it repairs
+  a half-finished install by itself.
+- "the disk is full": tell the user how much space is needed (about 3 GB) and where to free it. Running again
+  will not help until there is space.
+- npm failed: the installer printed the end of `~/.double-agent/install.log`. Read it and fix the real cause.
 - The test render failed: run the command it prints, read the real error, and fix it before you say it is done.
+- Node and FFmpeg installed by this run live in `~/.double-agent/node/bin` and `~/.double-agent/bin`. Your open
+  session does not see them yet: start follow-up commands with the `export PATH=...` line the installer prints.
 
 ## 3. Tell the user, in Hebrew
 

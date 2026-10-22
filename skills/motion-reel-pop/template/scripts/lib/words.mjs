@@ -95,19 +95,31 @@ export const alignToScript = (words, scriptText) => {
     lastEnd = lastEnd + span;
     pending = [];
   };
+  // Extra Whisper words since the last match. Before an English name they are its first piece
+  // ("שאת GPT" for ChatGPT), so the name starts there; otherwise they are a filler that stays on the previous word.
+  let orphan = null;
   for (const [wi, sj] of pairs) {
     if (wi !== null && sj !== null) {
-      flush(words[wi].start);
-      out.push({ text: S[sj], start: words[wi].start, end: words[wi].end });
+      let start = words[wi].start;
+      if (orphan) {
+        if (/[A-Za-z]/.test(S[sj]) && !pending.length) start = orphan.start;
+        else if (out.length) out[out.length - 1].end = orphan.end;
+        orphan = null;
+      }
+      flush(start);
+      out.push({ text: S[sj], start, end: words[wi].end });
       lastEnd = words[wi].end;
     } else if (sj !== null) {
       pending.push(S[sj]);
     } else if (wi !== null && out.length && !pending.length) {
-      // extra Whisper word (filler or split word): extend the previous word
-      out[out.length - 1].end = words[wi].end;
+      orphan = {
+        start: orphan ? orphan.start : words[wi].start,
+        end: words[wi].end,
+      };
       lastEnd = words[wi].end;
     }
   }
+  if (orphan && out.length) out[out.length - 1].end = orphan.end;
   flush(lastEnd + 0.12 * pending.length);
   return out;
 };

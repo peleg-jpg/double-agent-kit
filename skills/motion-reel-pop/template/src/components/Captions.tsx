@@ -31,7 +31,13 @@ import {
 } from "../layout";
 import type { StageState } from "./Stage";
 
-type Tok = { text: string; start: number; end: number; hl: boolean; until?: number };
+type Tok = {
+  text: string;
+  start: number;
+  end: number;
+  hl: boolean;
+  until?: number;
+};
 type Page = { start: number; end: number; toks: Tok[] };
 
 const HL = (config.captions.highlight ?? []).map((h) => h.toLowerCase());
@@ -129,6 +135,11 @@ export const Captions: React.FC<{ st: StageState }> = ({ st }) => {
     inAny(
       t,
       PUNCHES.map((p) => [p.at, p.to]),
+    ) ||
+    // a type beat (B-roll without a file) already shows the words big
+    inAny(
+      t,
+      BROLL.filter((b) => !b.src).map((b) => [b.at, b.to]),
     );
   // no caption while the face window is morphing (0.3 s), it would fly over the face
   if (hidden || (st.m > 0.04 && st.m < 0.96)) return null;

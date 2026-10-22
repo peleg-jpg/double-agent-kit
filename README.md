@@ -77,23 +77,9 @@ https://github.com/peleg-jpg/double-agent-kit תתקין בשבילי
 
 ## For Claude Code
 
-The user pasted this repo's link and asked you to install it. Follow [INSTALL_FOR_CLAUDE.md](INSTALL_FOR_CLAUDE.md). Short version, no git needed, takes 10-15 minutes the first time (run it in the background, or with the longest timeout, and tell the user it is working):
-
-**macOS**
-
-```bash
-mkdir -p ~/.double-agent/kit && cd ~/.double-agent/kit && \
-curl -fsSL https://github.com/peleg-jpg/double-agent-kit/archive/refs/heads/main.zip -o kit.zip && \
-tar -xf kit.zip && bash double-agent-kit-main/install/install-mac.sh
-```
-
-**Windows (PowerShell)**
-
-```powershell
-$k = "$HOME\.double-agent\kit"; New-Item -ItemType Directory -Force $k | Out-Null
-Invoke-WebRequest https://github.com/peleg-jpg/double-agent-kit/archive/refs/heads/main.zip -OutFile "$k\kit.zip" -UseBasicParsing
-Expand-Archive "$k\kit.zip" $k -Force
-powershell -ExecutionPolicy Bypass -File "$k\double-agent-kit-main\install\install-windows.ps1"
-```
-
-The installer prints `[OK]` / `[MISSING]` per part. Fix every `[MISSING]` line as INSTALL_FOR_CLAUDE.md says, then tell the user in Hebrew what was installed, show the connector steps from `guides/חיבור-הכלים.md`, and ask them to quit and reopen Claude.
+The user pasted this repo's link and asked you to install it. The full instructions are in
+[INSTALL_FOR_CLAUDE.md](INSTALL_FOR_CLAUDE.md), raw:
+`https://raw.githubusercontent.com/peleg-jpg/double-agent-kit/main/INSTALL_FOR_CLAUDE.md`. Fetch that file and
+follow it. In short: download the ZIP and extract it with `tar -xf` (never `unzip` on Mac), read
+`install/install-mac.sh` or `install/install-windows.ps1`, run it in the background (the first run takes 10-15
+minutes), fix every `[MISSING]` line, then tell the user in Hebrew what was installed and how to connect the tools.

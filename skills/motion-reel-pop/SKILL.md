@@ -20,7 +20,10 @@ The student works in plain Hebrew and is not technical. Do the commands yourself
 ```bash
 # from the student's project folder (any folder they choose), e.g. ~/reels/my-first-reel
 cp -R ~/.claude/skills/motion-reel-pop/template/. .        # Windows PowerShell: Copy-Item -Recurse ~\.claude\skills\motion-reel-pop\template\* .
-npm i                                                       # pinned versions, ~40 s, ~250 MB
+mkdir -p out public/broll
+# The "double-agent-kit" installer keeps one shared engine. If it exists, link it (seconds, no extra disk):
+ln -s ~/.double-agent/engine/node_modules node_modules      # Windows: New-Item -ItemType Junction -Path node_modules -Target "$HOME\.double-agent\engine\node_modules"
+# No shared engine: npm i instead (pinned versions, ~1 minute, about 1.1 GB after the first render downloads Chrome)
 ```
 
 Requirements: Node.js 20 or newer (`node -v`). On Mac the first transcription builds whisper.cpp, which needs
@@ -28,7 +31,8 @@ Requirements: Node.js 20 or newer (`node -v`). On Mac the first transcription bu
 downloaded. First render downloads Chrome Headless Shell (~90 MB). Whisper model: ~1.5 GB in `~/.motion-reel-pop/`,
 shared by all projects. Fonts load from Google Fonts at render time, so stay online.
 
-Smoke test before touching the student's video (proves the machine works, ~1 min):
+Smoke test before copying the student's video in (it writes `public/input.mp4`; skip it when the shared engine
+already rendered its install test):
 `npm run demo-video && npx remotion render src/index.ts Reel out/demo.mp4 --frames=0-150`
 
 ## 2. Ask the student (one message, casual Hebrew, all with defaults)
@@ -82,7 +86,7 @@ Example message: "שלחו לי את הסרטון, ואם יש לכם גם את 
 - **B-roll:** a clip or screenshot when they say a concrete thing you have a file for; a "type beat" (text only)
   when they list 3+ nouns quickly ("זום, יומן, CRM"). 1-2.5 s each.
 - **CTA** on the final ask ("תגיבו...", "תעקבו...", "לינק בביו"). Button text = the action in 2-3 words. It holds to
-  the end. Captions hide under the hook, punches and CTA (they would double the big text).
+  the end. Captions hide under the hook, punches, type beats and the CTA (they would double the big text).
 - Numbers and claims on screen come only from what the speaker says. Never invent a stat.
 
 ## 4. The looks (exact values; all in `src/looks.ts`, `src/layout.ts`, `src/components/`)
