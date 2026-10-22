@@ -17,14 +17,15 @@ longest timeout, and tell the user it is working.
 - Mac: `bash install/install-mac.sh`
 - Windows: `powershell -ExecutionPolicy Bypass -File install\install-windows.ps1`
 
-**You only have the link.** Download the kit (no git needed), then run it:
+**You only have the link.** Download the kit (no git needed), then run it. On Mac never extract with `unzip`: it
+breaks the Hebrew file names and stops with a y/n prompt. Use `tar -xf` (or `ditto -x -k`), as below.
 
 Mac:
 
 ```bash
 mkdir -p ~/.double-agent/kit && cd ~/.double-agent/kit && \
 curl -fsSL https://github.com/peleg-jpg/double-agent-kit/archive/refs/heads/main.zip -o kit.zip && \
-unzip -oq kit.zip && bash double-agent-kit-main/install/install-mac.sh
+tar -xf kit.zip && bash double-agent-kit-main/install/install-mac.sh
 ```
 
 Windows (PowerShell; from Git Bash, wrap each line in `powershell -Command "..."`):

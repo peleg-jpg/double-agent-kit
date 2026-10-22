@@ -88,7 +88,7 @@ The user pasted this repo's link and asked you to install it. Follow [INSTALL_FO
 ```bash
 mkdir -p ~/.double-agent/kit && cd ~/.double-agent/kit && \
 curl -fsSL https://github.com/peleg-jpg/double-agent-kit/archive/refs/heads/main.zip -o kit.zip && \
-unzip -oq kit.zip && bash double-agent-kit-main/install/install-mac.sh
+tar -xf kit.zip && bash double-agent-kit-main/install/install-mac.sh
 ```
 
 **Windows (PowerShell)**
