@@ -70,6 +70,8 @@ The installer prints `[OK]` or `[MISSING]` for each part and ends with `DONE` or
    `~/double-agent/guides/חיבור-הכלים.md` (ElevenLabs and Apify from Discover, HeyGen as a custom connector at
    `https://mcp.heygen.com/mcp/v1/`). No API key is needed.
 3. Quit Claude completely and open it again, so the new skills load. Then open a new chat and write: "תכין ריל".
+4. Point them to the quick guide `~/double-agent/guides/הריל-הראשון-עם-האווטאר-מדריך.pdf`: which photo and voice
+   recording to prepare, and how to get the best results. They can drag it into Claude Code and ask to be walked through it.
 
 Never print or store API keys in chat. If a tool ever asks for a key, save it to a local `.env` file and make sure
 `.gitignore` lists `.env`.

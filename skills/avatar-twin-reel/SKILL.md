@@ -56,9 +56,15 @@ Ask nothing you can see for yourself. Pick the entry point from what the user sa
 1. The name of their cloned voice in ElevenLabs. No voice yet: they need a paid ElevenLabs plan (Starter or
    higher, free has no cloning) and a 1-2 minute recording in a quiet room. Cloning is done on the ElevenLabs
    website (Voices > Add a new voice > Instant Voice Clone), or by you with Claude in Chrome if they have it.
-   Use only the user's own voice, with the consent box ticked by them.
-2. Their avatar photo: face to the camera, chest up, mouth closed, soft front light, quiet background, no
-   sunglasses, portrait orientation. Copy it to `~/double-agent/avatar-photo.<ext>`.
+   Use only the user's own voice, with the consent box ticked by them. **Check the recording before they clone**
+   (the clone is only as good as it): `ffmpeg -i <file> -af "volumedetect,silencedetect=n=-45dB:d=1" -f null -`
+   must show a length of 60-120 s, a mean volume louder than -30 dB, and no silence longer than 2 s. If it fails,
+   say in one Hebrew line what to fix: quieter room, phone about 20 cm from the mouth, talk like in a reel.
+2. Their avatar photo. **LOOK at it** and check: face straight to the camera, chest up, mouth closed, soft light
+   from the front, quiet background, portrait orientation, sharp, no sunglasses, no other people, no filter, head
+   not cut. Tell them what passes and, if something fails, exactly what to change in one line ("תעמדו מול חלון",
+   "צריך שיראו גם את הכתפיים"), and ask for a better one before any credit is spent. A phone selfie that passes
+   is fine. Copy it to `~/double-agent/avatar-photo.<ext>`.
 3. Their business and audience, one sentence.
 4. The comment keyword for the call to action (for example "מדריך") and what they send to people who comment.
 5. Look: pop (default, energetic), glass (premium), mono (bold opinions), split (tutorials). Brand color optional.
