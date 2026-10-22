@@ -1,0 +1,51 @@
+{
+  "palette": "paper",
+  "fps": 30,
+  "transition": "push",
+  "scenes": [
+    {
+      "type": "ui-click",
+      "title": "ככה זה נראה בפועל",
+      "app": "הסוכן שלי",
+      "appGlyph": "chat",
+      "placeholder": "מה לעשות היום?",
+      "typed": "תכתוב לי סקריפט לריל על מבצע",
+      "button": "שלח",
+      "result": "הסקריפט מוכן, 3 גרסאות",
+      "resultLines": 3
+    },
+    {
+      "type": "before-after",
+      "transition": "zoom",
+      "before": {
+        "label": "לפני",
+        "title": "עורך ידני",
+        "items": ["4 שעות על כל ריל", "תלוי בזמן של מישהו אחר"]
+      },
+      "after": {
+        "label": "אחרי",
+        "title": "Claude Code",
+        "items": ["20 דקות לריל מוכן", "אתם שולטים בכל פריים"]
+      }
+    },
+    {
+      "type": "quote",
+      "transition": "curtain",
+      "quote": "הסוכן עונה ללידים שלי גם כשאני ישן",
+      "highlight": "גם כשאני ישן",
+      "author": "דנה, בעלת סטודיו",
+      "role": "בוגרת המחזור הראשון",
+      "stat": { "value": 3, "prefix": "x", "label": "יותר פגישות בחודש" }
+    },
+    {
+      "type": "counter",
+      "transition": "curtain",
+      "kicker": "תוך חודש",
+      "value": 128,
+      "suffix": "+",
+      "label": "לידים חדשים",
+      "sub": "בלי להוסיף שקל לפרסום",
+      "chart": { "kind": "line", "values": [10, 14, 22, 30, 52, 80, 128] }
+    }
+  ]
+}

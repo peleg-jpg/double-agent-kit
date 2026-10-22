@@ -1,0 +1,67 @@
+{
+  "palette": "night",
+  "colors": {},
+  "fonts": { "display": "Secular One", "body": "Heebo", "ui": "Rubik" },
+  "fps": 30,
+  "transition": "curtain",
+  "scenes": [
+    {
+      "type": "counter",
+      "duration": 4.5,
+      "kicker": "הקהילה שלנו",
+      "value": 3900,
+      "label": "בוגרים",
+      "sub": "שכבר בנו לעצמם סוכן AI ראשון",
+      "chart": {
+        "kind": "bars",
+        "values": [8, 19, 34, 58, 100],
+        "lastLabel": "היום"
+      }
+    },
+    {
+      "type": "list",
+      "duration": 5,
+      "title": "3 טעויות שעולות לכם בלקוחות",
+      "highlight": "טעויות",
+      "icon": "x",
+      "items": [
+        "עונים לליד רק למחרת",
+        "זורקים מחיר לפני שמבינים מה הוא צריך",
+        "לא חוזרים אחרי ״אני אחשוב על זה״"
+      ]
+    },
+    {
+      "type": "logos",
+      "duration": 4,
+      "title": "הכלים שבונים לכם את הריל",
+      "tools": [
+        {
+          "name": "Claude",
+          "role": "כותב ועורך",
+          "glyph": "spark",
+          "color": "#D97757"
+        },
+        {
+          "name": "ElevenLabs",
+          "role": "הקול שלכם",
+          "glyph": "pause",
+          "color": "#F6F1E9",
+          "ink": "#12100E"
+        },
+        {
+          "name": "HeyGen",
+          "role": "האווטאר",
+          "glyph": "avatar",
+          "color": "#2F6BFF"
+        },
+        {
+          "name": "Apify",
+          "role": "אוסף נתונים",
+          "glyph": "nodes",
+          "color": "#1FA463"
+        }
+      ],
+      "footer": "הכל מתוך Claude Code"
+    }
+  ]
+}

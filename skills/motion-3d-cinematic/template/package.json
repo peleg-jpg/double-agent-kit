@@ -1,0 +1,30 @@
+{
+  "name": "motion-3d-cinematic",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render PhoneIntro out/phone-intro.mp4 --gl=angle",
+    "render:demo": "remotion render PhoneIntro out/phone-intro.mp4 --gl=angle --props=props/phone-studio-dark.json",
+    "render:laptop": "remotion render LaptopIntro out/laptop-intro.mp4 --gl=angle --props=props/laptop.json",
+    "render:endcard": "remotion render EndCard out/end-card.mp4 --gl=angle --props=props/endcard.json",
+    "stills": "remotion still PhoneIntro out/still-90.png --frame=90 --gl=angle",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-three/fiber": "8.18.0",
+    "@remotion/cli": "4.0.536",
+    "@remotion/google-fonts": "4.0.536",
+    "@remotion/media": "4.0.536",
+    "@remotion/three": "4.0.536",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.536",
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "@types/three": "0.170.0",
+    "typescript": "5.6.3"
+  }
+}

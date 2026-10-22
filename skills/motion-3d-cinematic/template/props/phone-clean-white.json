@@ -1,0 +1,16 @@
+{
+  "look": "clean-white",
+  "titleLines": [
+    "ה-AI שעובד",
+    "גם כשהמחשב כבוי"
+  ],
+  "kicker": "Dots ב-ChatGPT",
+  "videoSrc": "screen.mp4",
+  "videoStartSec": 0,
+  "volume": 1,
+  "handoff": true,
+  "titleMode": "3d",
+  "accent": "",
+  "frameColor": "",
+  "durationSec": 11
+}

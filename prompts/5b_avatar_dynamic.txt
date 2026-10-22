@@ -1,0 +1,29 @@
+מה הפרומפט הזה עושה: אווטאר דינמי במקום אווטאר שעומד במקום. הדמות שלכם הולכת, זזה בחלל, עושה תנועות ידיים ומדברת עם הקול שלכם, עם סנכרון שפתיים מדויק בעברית. ככה זה עובד: מודל וידאו (Seedance 2.5) מייצר את התנועה, ואז מודל lip-sync מלביש עליה את הקול מ-ElevenLabs.
+צריך: חשבון ב-kie.ai עם קרדיטים ומפתח API, תמונה אחת של הדמות שלכם (מאסטר), voice.mp3 מפרומפט 4, ופרויקט Remotion מפרומפט 6.
+עלות בערך: כ-70 קרדיטים של kie לכל שנייה של פנים (בערך 0.35 דולר לשנייה). ריל של 40 שניות עם 15-20 שניות פנים יוצא בערך 6-10 דולר כולל ניסיונות חוזרים.
+איך משתמשים: מעתיקים את כל מה שמתחת לקו, מחליפים את מה שבסוגריים המרובעים [ ], ומדביקים לקלוד קוד.
+
+===== להעתיק מכאן לקלוד קוד =====
+
+תבנה לי ריל עם אווטאר דינמי: הדמות שלי הולכת וזזה בחלל ומדברת עם הקול שלי, עם lip-sync מדויק בעברית.
+
+התמונה של הדמות: [גוררים לכאן את תמונת המאסטר]
+הקול: הקובץ voice.mp3 בתיקייה שאני עובד בה
+הסגנון שאני רוצה: [מתארים במילים, או גוררים לכאן רפרנס]
+
+כללים:
+- המפתח של kie.ai נשמר רק בקובץ .env. קודם תוודא ש-.env מופיע ב-.gitignore, ואם אין .gitignore תיצור אחד. אף פעם לא לכתוב את המפתח בקוד או בצ'אט.
+- לפני כל פעולה שעולה כסף תבדוק יתרה ותעצור לאישור שלי עם הצעת מחיר.
+
+1. יתרה: תבדוק כמה קרדיטים יש לי ב-kie (GET https://api.kie.ai/api/v1/chat/credit עם Authorization: Bearer).
+2. תמלול: תעשה תמלול עם חותמות זמן לכל מילה ל-voice.mp3 (ElevenLabs speech to text).
+3. תוכנית שוטים: תחלק את הריל לשוטים של 4-8 שניות. כל חיתוך נופל על הפסקה בדיבור, אף פעם לא באמצע מילה. הפנים מופיעות רק בפתיחה, ברגעי שיא ובסוף. בשאר הזמן גרפיקה, צילומי מסך או B-roll. לכל שוט תכתוב: הטקסט שנאמר בו, זמני התחלה וסוף, מה הדמות עושה, תנועת מצלמה אחת, ואיפה זה קורה. תראה לי טבלה ותחכה לאישור.
+4. חיתוך הקול: תחתוך מ-voice.mp3 קטע קול לכל שוט לפי הזמנים, עם 0.12 שניות שוליים בכל צד.
+5. פרומפט תנועה לכל שוט, באנגלית, לפי התבנית הזו:
+   "Vertical 9:16 video, one continuous take. The person from the reference image [ACTION, for example: walks slowly toward the camera through a bright modern office], talking to the camera with warm energy, following the rhythm of the reference audio. He says "[phrase 1]", closes his mouth for a short pause, then says "[phrase 2]". Camera: [ONE slow move, for example: slow tracking shot backwards at eye level]. His face stays turned toward the camera most of the time and fills a good part of the frame. Natural hand gestures in front of his chest. He blinks naturally. Keep his face, hair, beard, clothes and lighting exactly as in the reference image. No music, no subtitles, no text on screen."
+   כללים לפרומפט: תנועת מצלמה אחת לשוט, איטית. מדיום שוט (מהמותניים ומעלה), לא שוט רחב. סיבובים והליכה עם הגב למצלמה רק בשוטים בלי דיבור. כל הפסקה בקול נכתבת בפרומפט כ"closes his mouth", כי ה-lip-sync לא יודע לסגור פה שנשאר פתוח.
+6. בדיקה זולה: שוט אחד ב-480p קודם (Seedance על kie, מודל bytedance/seedance-2-5, עם reference_image_urls = התמונה, reference_audio_urls = קטע הקול, generate_audio: false, aspect_ratio: "9:16", duration = מספר שלם של שניות, מינימום 4). את הקבצים מעלים ל-https://kieai.redpandaai.co/api/file-stream-upload, יוצרים משימה ב-POST https://api.kie.ai/api/v1/jobs/createTask ובודקים סטטוס ב-GET https://api.kie.ai/api/v1/jobs/recordInfo?taskId=. שים לב: data.resultJson הוא מחרוזת JSON שצריך לפענח שוב. תשתיק את האודיו של התוצאה ותוציא ממנה 6 פריימים כדי שאראה איך הפנים נראות. אני מאשר לפני שממשיכים.
+7. הפקה מלאה: Seedance ב-720p לכל השוטים, 2 במקביל לכל היותר. "server is busy" זה בלי חיוב, פשוט מנסים שוב. כל תוצאה מושתקת. תוציא פריימים מכל שוט ותבדוק שהפנים חדות ודומות לתמונה. שוט עם פנים מרוחות או דמות אחרת מייצרים מחדש לפני ה-lip-sync.
+8. Lip-sync לכל שוט: מודל volcengine/video-to-video-lip-sync על kie עם {"mode":"lite","video_url":<השוט המושתק>,"audio_url":<קטע הקול>,"align_audio":true}. רק הפה מתחלף, וכל השאר נשאר מהשוט.
+9. עריכה ב-Remotion: כל שוט נכנס ב-Sequence שמתחיל בדיוק בזמן ההתחלה של קטע הקול שלו. השוטים מושתקים, ו-voice.mp3 המלא מתנגן כערוץ קול אחד לאורך כל הריל. ככה הסנכרון לא יכול לזוז. בין השוטים גרפיקה וכתוביות.
+10. בדיקה: תרנדר, תוציא פריים מאמצע כל שוט ותבדוק שהפה זז כשיש דיבור וסגור בהפסקות. תגיד לי כמה קרדיטים ירדו בסך הכל.

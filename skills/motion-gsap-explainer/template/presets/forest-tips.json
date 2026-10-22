@@ -1,0 +1,23 @@
+{
+  "palette": "forest",
+  "fps": 30,
+  "transition": "push",
+  "scenes": [
+    {
+      "type": "list",
+      "title": "3 דברים שהסוכן עושה במקומכם",
+      "highlight": "במקומכם",
+      "icon": "check",
+      "items": ["עונה לכל ליד תוך דקה", "קובע פגישה ביומן לבד", "שולח תזכורת יום לפני"]
+    },
+    {
+      "type": "counter",
+      "kicker": "בממוצע",
+      "value": 12,
+      "suffix": " שעות",
+      "label": "חוסכים בשבוע",
+      "sub": "זמן שחוזר אליכם לעבודה עצמה",
+      "chart": { "kind": "line", "values": [2, 3, 5, 6, 9, 12] }
+    }
+  ]
+}

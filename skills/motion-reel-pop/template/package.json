@@ -1,0 +1,32 @@
+{
+  "name": "motion-reel-pop",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "demo-video": "remotion render src/index.ts DemoSpeaker public/input.mp4 --codec h264 --crf 23",
+    "transcribe": "node scripts/transcribe.mjs",
+    "captions": "node scripts/import-captions.mjs",
+    "stills": "node scripts/stills.mjs",
+    "render": "remotion render src/index.ts Reel out/reel.mp4 --codec h264 --crf 18",
+    "finish": "node scripts/finish.mjs out/reel.mp4",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.536",
+    "@remotion/captions": "4.0.536",
+    "@remotion/cli": "4.0.536",
+    "@remotion/google-fonts": "4.0.536",
+    "@remotion/install-whisper-cpp": "4.0.536",
+    "@remotion/media-parser": "4.0.536",
+    "@remotion/renderer": "4.0.536",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.536"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.31",
+    "typescript": "5.9.3"
+  }
+}

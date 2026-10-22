@@ -1,0 +1,21 @@
+{
+  "look": "pop",
+  "video": "input.mp4",
+  "face": { "x": 540, "y": 620 },
+  "brand": { "accent": null, "accent2": null, "logo": null, "handle": "" },
+  "hook": { "text": "שלושה כלים שחוסכים לי שעה כל יום", "kicker": "שמרו את זה", "until": "@יום>" },
+  "captions": { "maxWords": 3, "maxChars": 16, "highlight": ["Claude Code", "Canva"], "fix": {}, "hide": [] },
+  "zooms": [{ "at": "@הראשון", "to": "@Code>", "scale": 1.2 }],
+  "cards": [
+    { "type": "tool", "at": "@כותב", "to": "@קוד>", "name": "Claude Code", "sub": "כותב לי את הקוד" },
+    { "type": "list", "at": "@השני", "to": "@מהירים>", "n": 2, "title": "Canva", "sub": "לעיצובים מהירים" },
+    { "type": "stat", "at": "@והשלישי", "to": "@מהזמן>", "value": 80, "suffix": "%", "label": "פחות זמן על עבודה שחוזרת" }
+  ],
+  "punches": [],
+  "broll": [],
+  "cta": { "at": "@אז", "title": "רוצים את הרשימה המלאה?", "sub": "", "button": "תכתבו \"כלים\"", "handle": "" },
+  "progress": true,
+  "sfx": true,
+  "music": null,
+  "musicVolume": 0.08
+}

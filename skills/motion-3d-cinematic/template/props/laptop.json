@@ -1,0 +1,16 @@
+{
+  "look": "studio-dark",
+  "titleLines": [
+    "ככה זה נראה",
+    "מבפנים"
+  ],
+  "kicker": "הדגמה מהמחשב",
+  "videoSrc": "",
+  "videoStartSec": 0,
+  "volume": 0,
+  "fit": "contain",
+  "titleMode": "3d",
+  "accent": "",
+  "frameColor": "",
+  "durationSec": 10
+}
